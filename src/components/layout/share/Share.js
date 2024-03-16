@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import axios from "axios";
 import { NotificationManager } from "react-notifications";
 
+import * as CONST from "../../../constant/constant";
+
 export default class Main extends Component {
   constructor(props) {
     super(props);
@@ -70,7 +72,7 @@ export default class Main extends Component {
                   <input
                     type="text"
                     name="url"
-                    placeholder=""
+                    placeholder="Ex:https://www.youtube.com/watch?v=cw34KMPSt4k"
                     className="ml-10px"
                     value={this.state.url}
                     onChange={this.handleChange}
@@ -81,9 +83,11 @@ export default class Main extends Component {
 
               <div className="d-flex pt-20px">
                 <div>
-                  <button type="submit" className="ml-10px">
-                    Share
-                  </button>
+                  {this.props.loggedInStatus === CONST.LOGGED_IN && (
+                    <button type="submit" className="ml-10px">
+                      Share
+                    </button>
+                  )}
                 </div>
               </div>
             </form>

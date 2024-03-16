@@ -1,22 +1,17 @@
 import React, { StrictMode } from "react";
 import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
-import { createStore, applyMiddleware } from "redux";
-import { BrowserRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 import App from "./components/app";
-import reducers from "./reducers";
-
-const createStoreWithMiddleware = applyMiddleware()(createStore);
 
 import "./style/main.scss";
 
 function main() {
   ReactDOM.render(
-    <Provider store={createStoreWithMiddleware(reducers)}>
-      <BrowserRouter>
+    <StrictMode>
+      <HashRouter>
         <App />
-      </BrowserRouter>
-    </Provider>,
+      </HashRouter>
+    </StrictMode>,
     document.querySelector(".app-wrapper")
   );
 }

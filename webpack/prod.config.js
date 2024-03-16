@@ -12,6 +12,8 @@ const CleanWebpackPlugin = require("clean-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const LoaderOptionsPlugin = require("webpack/lib/LoaderOptionsPlugin");
 
+const env = require("../env");
+
 module.exports = webpackMerge(webpackCommon, {
   bail: true,
 

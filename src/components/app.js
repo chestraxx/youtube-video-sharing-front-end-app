@@ -9,7 +9,6 @@ import {
 import "react-notifications/lib/notifications.css";
 
 import * as CONST from "../constant/constant";
-import history from "../history.js";
 
 import TopNav from "./layout/TopNav";
 import Home from "./layout/home/Home";
@@ -116,53 +115,44 @@ function App() {
     <div className="app">
       <NotificationContainer />
 
-      <BrowserRouter>
-        <Switch>
-          <Route
-            exact
-            path={"/"}
-            render={(props) => (
-              <div className="home-page">
-                <TopNav
-                  {...props}
-                  loggedInStatus={loggedInStatus}
-                  user={user}
-                  handleLogin={handleLogin}
-                  handleLogout={handleLogout}
-                />
+      <Switch>
+        <Route
+          exact
+          path={"/"}
+          render={(props) => (
+            <div className="home-page">
+              <TopNav
+                {...props}
+                loggedInStatus={loggedInStatus}
+                user={user}
+                handleLogin={handleLogin}
+                handleLogout={handleLogout}
+              />
 
-                <Home {...props} loggedInStatus={loggedInStatus} user={user} />
-              </div>
-            )}
-          />
-
-          {loggedInStatus === CONST.LOGGED_IN && (
-            <Route
-              exact
-              path={"/share"}
-              render={(props) => (
-                <div className="share-page">
-                  <TopNav
-                    {...props}
-                    loggedInStatus={loggedInStatus}
-                    user={user}
-                    handleLogin={handleLogin}
-                    handleLogout={handleLogout}
-                  />
-
-                  <Share
-                    {...props}
-                    loggedInStatus={loggedInStatus}
-                    user={user}
-                  />
-                </div>
-              )}
-            />
+              <Home {...props} loggedInStatus={loggedInStatus} user={user} />
+            </div>
           )}
+        />
 
-          <Route path={"*"} render={() => <Page404 />} />
-        </Switch>
-      </BrowserRouter>
+        <Route
+          path={"/share"}
+          render={(props) => (
+            <div className="share-page">
+              <TopNav
+                {...props}
+                loggedInStatus={loggedInStatus}
+                user={user}
+                handleLogin={handleLogin}
+                handleLogout={handleLogout}
+              />
+
+              <Share {...props} loggedInStatus={loggedInStatus} user={user} />
+            </div>
+          )}
+        />
+
+        <Route path={"*"} render={() => <Page404 />} />
+      </Switch>
     </div>
   );
 }
