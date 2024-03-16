@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import axios from "axios";
 
 export default class Main extends Component {
   constructor(props) {
@@ -8,11 +7,8 @@ export default class Main extends Component {
 
   render() {
     return (
-      <div className="main">
-        <div>
-          <h1>Home</h1>
-          <h1>Status: {this.props.user.email} </h1>
-        </div>
+      <div className="page-404">
+        <h1>Page not found!</h1>
       </div>
     );
   }

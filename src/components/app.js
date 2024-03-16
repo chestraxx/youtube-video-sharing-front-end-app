@@ -1,98 +1,170 @@
-import React, { Component } from "react";
+import React from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import axios from "axios";
+import {
+  NotificationContainer,
+  NotificationManager,
+} from "react-notifications";
+import "react-notifications/lib/notifications.css";
+
+import * as CONST from "../constant/constant";
+import history from "../history.js";
 
 import TopNav from "./layout/TopNav";
-import Main from "./layout/Main";
+import Home from "./layout/home/Home";
+import Share from "./layout/share/Share";
+import Page404 from "./layout/error/Page404";
 
-export default class App extends Component {
-  constructor() {
-    super();
+var ws = null;
 
-    this.state = {
-      loggedInStatus: "NOT_LOGGED_IN",
-      user: {},
-    };
+function App() {
+  const [loggedInStatus, setLoggedInStatus] = useState(CONST.NOT_LOGGED_IN);
+  const [user, setUser] = useState({});
 
-    this.handleLogin = this.handleLogin.bind(this);
-    this.handleLogout = this.handleLogout.bind(this);
-  }
+  useEffect(() => {
+    checkLoginStatus();
+  }, []);
 
-  checkLoginStatus() {
-    axios
-      .get("http://localhost:3001/logged_in", { withCredentials: true })
-      .then((response) => {
-        console.log("logged in", response);
+  useEffect(() => {
+    initialWS();
+  }, [loggedInStatus]);
+
+  const initialWS = async () => {
+    if (loggedInStatus === CONST.LOGGED_IN) {
+      await connectToWebSocketServer();
+    }
+  };
+
+  const connectToWebSocketServer = () => {
+    ws = new WebSocket(`${process.env.websocket}`);
+
+    setTimeout(() => {
+      ws.send(
+        JSON.stringify({
+          command: "subscribe",
+          identifier: JSON.stringify({
+            id: user.id,
+            channel: `NotificationsChannel`,
+          }),
+        })
+      );
+
+      ws.onmessage = (e) => {
+        const data = JSON.parse(e.data);
+
         if (
-          response.data.logged_in &&
-          this.state.loggedInStatus === "NOT_LOGGED_IN"
+          data.type === "ping" ||
+          data.type === "welcome" ||
+          data.type === "confirm_subscription" ||
+          data.type === "disconnect"
         ) {
-          this.setState({
-            loggedInStatus: "LOGGED_IN",
-            user: response.data.user,
-          });
+          return;
+        }
+
+        const { message } = data;
+        if (message.video_title && message.created_by) {
+          NotificationManager.info(
+            `A video was shared by ${message.created_by}`,
+            message.video_title,
+            5000
+          );
+        }
+      };
+    }, 5000);
+  };
+
+  const checkLoginStatus = async () => {
+    await axios
+      .get(`${process.env.api}/logged_in`, { withCredentials: true })
+      .then((response) => {
+        if (response.data.logged_in && loggedInStatus === CONST.NOT_LOGGED_IN) {
+          setLoggedInStatus(CONST.LOGGED_IN);
+          setUser(response.data.user);
         } else if (
           !response.data.logged_in &&
-          this.state.loggedInStatus === "LOGGED_IN"
+          loggedInStatus === CONST.LOGGED_IN
         ) {
-          this.setState({
-            loggedInStatus: "NOT_LOGGED_IN",
-            user: {},
-          });
+          setLoggedInStatus(CONST.NOT_LOGGED_IN);
+          setUser({});
         }
       })
       .catch((error) => {
         console.log("logged in error", error);
       });
-  }
+  };
 
-  componentDidMount() {
-    this.checkLoginStatus();
-  }
+  const handleLogin = (data) => {
+    setTimeout(() => {
+      initialWS();
+    }, 500);
 
-  handleLogin(data) {
-    this.setState({
-      loggedInStatus: "LOGGED_IN",
-      user: data.user,
-    });
-  }
+    setLoggedInStatus(CONST.LOGGED_IN);
+    setUser(data.user);
+  };
 
-  handleLogout() {
-    this.setState({
-      loggedInStatus: "NOT_LOGGED_IN",
-      user: {},
-    });
-  }
+  const handleLogout = () => {
+    ws.close();
 
-  render() {
-    return (
-      <div className="app">
-        <BrowserRouter>
-          <Switch>
+    setLoggedInStatus(CONST.NOT_LOGGED_IN);
+    setUser({});
+
+    window.location.href = "/";
+  };
+
+  return (
+    <div className="app">
+      <NotificationContainer />
+
+      <BrowserRouter>
+        <Switch>
+          <Route
+            exact
+            path={"/"}
+            render={(props) => (
+              <div className="home-page">
+                <TopNav
+                  {...props}
+                  loggedInStatus={loggedInStatus}
+                  user={user}
+                  handleLogin={handleLogin}
+                  handleLogout={handleLogout}
+                />
+
+                <Home {...props} loggedInStatus={loggedInStatus} user={user} />
+              </div>
+            )}
+          />
+
+          {loggedInStatus === CONST.LOGGED_IN && (
             <Route
               exact
-              path={"/"}
+              path={"/share"}
               render={(props) => (
-                <div className="home-page">
+                <div className="share-page">
                   <TopNav
                     {...props}
-                    loggedInStatus={this.state.loggedInStatus}
-                    user={this.state.user}
-                    handleLogin={this.handleLogin}
-                    handleLogout={this.handleLogout}
+                    loggedInStatus={loggedInStatus}
+                    user={user}
+                    handleLogin={handleLogin}
+                    handleLogout={handleLogout}
                   />
 
-                  <Main
+                  <Share
                     {...props}
-                    loggedInStatus={this.state.loggedInStatus}
-                    user={this.state.user}
+                    loggedInStatus={loggedInStatus}
+                    user={user}
                   />
                 </div>
               )}
             />
-          </Switch>
-        </BrowserRouter>
-      </div>
-    );
-  }
+          )}
+
+          <Route path={"*"} render={() => <Page404 />} />
+        </Switch>
+      </BrowserRouter>
+    </div>
+  );
 }
+
+export default App;

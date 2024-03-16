@@ -37,11 +37,19 @@ body {
         padding-left: 10px;
     }
 
+    .pt-20px {
+        padding-top: 20px;
+    }
+
     .ml-10px {
         margin-left: 10px;
     }
 
-    .home-page {
+    .ml-5px {
+        margin-left: 5px;
+    }
+
+    .home-page, .share-page {
         width: 80%;
     }
 
@@ -54,6 +62,7 @@ body {
 
         .home-icon {
             width: 40px;
+            cursor: pointer;
         }
 
         .home-title {
@@ -62,8 +71,87 @@ body {
         }
     }
 
-    .main {
+    .home {
         padding-top: 20px;
+        width: 60%;
+        margin: 0 auto;
+        display: block;
+
+        .card-video {
+            padding-bottom: 40px;
+
+            .left-box {
+                display: flex;
+                align-content: center;
+                flex-wrap: wrap;
+            }
+
+            .right-box {
+                padding-left: 20px;
+                line-height: 20px;
+
+                .title {
+                    font-size: 15px;
+                    font-weight: 1000;
+                    color: rgb(248, 112, 112);
+                    text-decoration: none;
+                }
+
+                .icon {
+                    width: 10px;
+                }
+
+                .description {
+                    font-style: italic;
+                    font-size: 12px;
+                    font-weight: 1000;
+                }
+            }
+        }
+
     }
 
+
+    .share {
+        padding-top: 100px;
+        width: 60%;
+        margin: 0 auto;
+        display: block;
+
+        .share-box {
+            fieldset {
+                border: 2px solid #a0a0a0;
+                border-radius: 10px;
+
+                legend {
+                    margin-left: 20px;
+                }
+            }
+
+            .form {
+                height: 200px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+
+                input {
+                    width: 200px;
+                }
+
+                button {
+                    width: 100%;
+                }
+            }
+        }
+    }
+
+    .page-404 {
+        display: flex;
+        width: 100%;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+    }
 }

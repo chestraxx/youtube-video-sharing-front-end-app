@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { NotificationManager } from "react-notifications";
 
 export default class Registration extends Component {
   constructor(props) {
@@ -10,14 +11,14 @@ export default class Registration extends Component {
 
   handleLogoutClick() {
     axios
-      .delete("http://localhost:3001/logout", { withCredentials: true })
+      .delete(`${process.env.api}/logout`, { withCredentials: true })
       .then((response) => {
-        alert("Logout successfully!");
+        NotificationManager.success("Logout successfully!");
 
         this.props.handleLogout();
       })
       .catch((error) => {
-        alert("Logout failed!");
+        NotificationManager.error("Logout failed!");
 
         console.log("logout error", error);
       });
@@ -25,15 +26,9 @@ export default class Registration extends Component {
 
   render() {
     return (
-      <div>
-        <button className="ml-10px" onClick={() => this.handleLogoutClick()}>
-          Share a movie
-        </button>
-
-        <button className="ml-10px" onClick={() => this.handleLogoutClick()}>
-          Logout
-        </button>
-      </div>
+      <button className="ml-10px" onClick={() => this.handleLogoutClick()}>
+        Logout
+      </button>
     );
   }
 }

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { NotificationManager } from "react-notifications";
 
 export default class Registration extends Component {
   constructor(props) {
@@ -22,7 +23,7 @@ export default class Registration extends Component {
 
     axios
       .post(
-        "http://localhost:3001/registration",
+        `${process.env.api}/registration`,
         {
           user: {
             email,
@@ -35,13 +36,13 @@ export default class Registration extends Component {
       )
       .then((response) => {
         if (response.data.status === "created") {
-          alert("Login successfully!");
+          NotificationManager.success("Register successfully!");
 
           this.props.handleSuccessfulAuth(response.data);
         }
       })
       .catch((error) => {
-        alert("Login failed!");
+        NotificationManager.error("Register failed!");
 
         console.log("registration error", error);
       });
