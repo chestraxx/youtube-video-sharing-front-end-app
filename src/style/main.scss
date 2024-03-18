@@ -84,6 +84,11 @@ body {
                 display: flex;
                 align-content: center;
                 flex-wrap: wrap;
+
+                iframe {
+                    width: 400px;
+                    height: 300px;
+                }
             }
 
             .right-box {

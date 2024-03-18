@@ -12,13 +12,11 @@ export default class Registration extends Component {
     return (
       <div className="card-video d-flex ">
         <div className="left-box">
-          <a
-            className="title"
-            href={this.props.video.video_url}
-            target="_blank"
-          >
-            <img src={this.props.video.thumbnail} width="400" height="300" />
-          </a>
+          <div className="video-embed">
+            <div
+              dangerouslySetInnerHTML={{ __html: this.props.video.embed_code }}
+            />
+          </div>
         </div>
 
         <div className="right-box">
