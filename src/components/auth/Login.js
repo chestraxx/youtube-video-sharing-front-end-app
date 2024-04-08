@@ -35,16 +35,20 @@ export default class Registration extends Component {
         }
       )
       .then((response) => {
-        if (response.data.logged_in) {
+        if (response.data.registed) {
+          NotificationManager.success("Register successfully!");
+
+          this.props.handleSuccessfulAuth(response.data);
+        } else if (response.data.logged_in) {
           NotificationManager.success("Login successfully!");
 
           this.props.handleSuccessfulAuth(response.data);
         } else {
-          NotificationManager.error("Login failed!");
+          NotificationManager.error("Login \\ Register failed!");
         }
       })
       .catch((error) => {
-        NotificationManager.error("Login failed!");
+        NotificationManager.error("Login \\ Register failed!");
 
         console.log("login error", error);
       });
@@ -81,7 +85,7 @@ export default class Registration extends Component {
           />
 
           <button type="submit" className="ml-10px">
-            Login
+            Login / Register
           </button>
         </form>
       </div>

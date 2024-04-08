@@ -3,7 +3,6 @@ import axios from "axios";
 
 import * as CONST from "../../constant/constant";
 
-import Registration from "../auth/Registration";
 import Login from "../auth/Login";
 import Logout from "../auth/Logout";
 
@@ -12,15 +11,11 @@ export default class TopNav extends Component {
     super(props);
 
     this.state = {
-      isLogin: false,
-      isRegister: false,
       email: "",
       password: "",
       registrationErrors: "",
     };
 
-    this.handleLoginClick = this.handleLoginClick.bind(this);
-    this.handleRegisterClick = this.handleRegisterClick.bind(this);
     this.handleShareClick = this.handleShareClick.bind(this);
     this.handleHomeClick = this.handleHomeClick.bind(this);
 
@@ -29,24 +24,8 @@ export default class TopNav extends Component {
   }
 
   handleSuccessfulAuth(data) {
-    this.setState({
-      isLogin: false,
-      isRegister: false,
-    });
     this.props.handleLogin(data);
     this.props.history.push("/");
-  }
-
-  handleLoginClick() {
-    this.setState({
-      isLogin: true,
-    });
-  }
-
-  handleRegisterClick() {
-    this.setState({
-      isRegister: true,
-    });
   }
 
   handleShareClick() {
@@ -80,37 +59,9 @@ export default class TopNav extends Component {
         </div>
 
         <div className="d-flex align-items-center">
-          {this.props.loggedInStatus === CONST.NOT_LOGGED_IN &&
-            !this.state.isLogin &&
-            !this.state.isRegister && (
-              <button
-                className="ml-10px"
-                onClick={() => this.handleLoginClick()}
-              >
-                Login
-              </button>
-            )}
-
-          {this.props.loggedInStatus === CONST.NOT_LOGGED_IN &&
-            this.state.isLogin && (
-              <Login handleSuccessfulAuth={this.handleSuccessfulAuth} />
-            )}
-
-          {this.props.loggedInStatus === CONST.NOT_LOGGED_IN &&
-            !this.state.isLogin &&
-            !this.state.isRegister && (
-              <button
-                className="ml-10px"
-                onClick={() => this.handleRegisterClick()}
-              >
-                Register
-              </button>
-            )}
-
-          {this.props.loggedInStatus === CONST.NOT_LOGGED_IN &&
-            this.state.isRegister && (
-              <Registration handleSuccessfulAuth={this.handleSuccessfulAuth} />
-            )}
+          {this.props.loggedInStatus === CONST.NOT_LOGGED_IN && (
+            <Login handleSuccessfulAuth={this.handleSuccessfulAuth} />
+          )}
 
           {this.props.loggedInStatus === CONST.LOGGED_IN && (
             <span>Welcome {this.props.user.email || "User"}</span>
