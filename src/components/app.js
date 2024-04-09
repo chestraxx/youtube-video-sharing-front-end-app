@@ -1,6 +1,12 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter,
+  Switch,
+  Route,
+  useLocation,
+  useHistory,
+} from "react-router-dom";
 import axios from "axios";
 import {
   NotificationContainer,
@@ -20,10 +26,11 @@ var ws = null;
 function App() {
   const [loggedInStatus, setLoggedInStatus] = useState(CONST.NOT_LOGGED_IN);
   const [user, setUser] = useState({});
+  const location = useLocation();
 
   useEffect(() => {
     checkLoginStatus();
-  }, []);
+  }, [location]);
 
   useEffect(() => {
     initialWS();
@@ -77,15 +84,24 @@ function App() {
     await axios
       .get(`${process.env.api}/logged_in`, { withCredentials: true })
       .then((response) => {
-        if (response.data.logged_in && loggedInStatus === CONST.NOT_LOGGED_IN) {
+        if (response.data.logged_in) {
           setLoggedInStatus(CONST.LOGGED_IN);
           setUser(response.data.user);
-        } else if (
-          !response.data.logged_in &&
-          loggedInStatus === CONST.LOGGED_IN
-        ) {
-          setLoggedInStatus(CONST.NOT_LOGGED_IN);
-          setUser({});
+
+          return;
+        }
+
+        setLoggedInStatus(CONST.NOT_LOGGED_IN);
+        setUser({});
+
+        if (location.pathname === "/share") {
+          NotificationManager.error(
+            "Have to login first to access Share page!"
+          );
+
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 1200);
         }
       })
       .catch((error) => {

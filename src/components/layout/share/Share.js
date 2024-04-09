@@ -17,8 +17,6 @@ export default class Main extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  componentDidMount() {}
-
   handleSubmitShare(event) {
     event.preventDefault();
 
