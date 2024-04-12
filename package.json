@@ -2,7 +2,7 @@
   "name": "react-redux-router",
   "version": "1.0.0",
   "engines": {
-    "node": "16.13.0"
+    "node": "v20.9.0"
   },
   "description": "Basic skeleton codebase for React/Redux/Router applications.",
   "scripts": {
@@ -11,7 +11,8 @@
     "build": "cross-env NODE_ENV=production webpack --config webpack/prod.config.js --progress --display-error-details --color",
     "heroku-postbuild": "npm run build",
     "precommit": "eslint src",
-    "prod": "NODE_ENV=production node server.js"
+    "prod": "NODE_ENV=production node server.js",
+    "test": "jest --watchAll --coverage"
   },
   "repository": {
     "type": "git",
@@ -35,13 +36,12 @@
   },
   "homepage": "https://github.com/bottega-code-school/js-builder",
   "dependencies": {
+    "@babel/cli": "^7.24.1",
+    "@babel/core": "^7.24.4",
     "ajv": "6.12.0",
     "autoprefixer": "^9.1.0",
     "axios": "^0.21.1",
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
     "babel-eslint": "^7.2.3",
-    "babel-loader": "^7.1.5",
     "babel-plugin-async-to-promises": "^1.0.5",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-polyfill": "^6.26.0",
@@ -65,6 +65,7 @@
     "react-redux": "7.2.0",
     "react-router": "5.1.2",
     "react-router-dom": "5.1.2",
+    "react-scripts": "^5.0.1",
     "redux": "4.0.5",
     "sass": "^1.71.1",
     "sass-loader": "^7.1.0",
@@ -77,11 +78,20 @@
     "webpack-merge": "4.2.2"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.24.4",
+    "@babel/preset-react": "^7.24.1",
+    "@testing-library/jest-dom": "^6.4.2",
+    "@testing-library/react": "^12.1.5",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-loader": "^7.1.5",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-react": "^6.24.1",
     "babel-register": "^6.26.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jest-fetch-mock": "^3.0.3",
+    "react-hot-loader": "^4.13.1",
     "uglifyjs-webpack-plugin": "^1.2.7"
   }
 }
