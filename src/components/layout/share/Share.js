@@ -70,6 +70,7 @@ export default class Main extends Component {
                   <input
                     type="text"
                     name="url"
+                    aria-label="url"
                     placeholder="Ex:https://www.youtube.com/watch?v=cw34KMPSt4k"
                     className="ml-10px"
                     value={this.state.url}

@@ -20,7 +20,6 @@ export default class TopNav extends Component {
     this.handleHomeClick = this.handleHomeClick.bind(this);
 
     this.handleSuccessfulAuth = this.handleSuccessfulAuth.bind(this);
-    this.handleChange = this.handleChange.bind(this);
   }
 
   handleSuccessfulAuth(data) {
@@ -36,18 +35,13 @@ export default class TopNav extends Component {
     this.props.history.push("/");
   }
 
-  handleChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value,
-    });
-  }
-
   render() {
     return (
       <div className="topnav d-flex align-items-center">
         <div className="d-flex align-items-center">
           <svg
             className="home-icon"
+            data-testid="home-icon-el"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 576 512"
             onClick={() => this.handleHomeClick()}
@@ -74,10 +68,7 @@ export default class TopNav extends Component {
           )}
 
           {this.props.loggedInStatus === CONST.LOGGED_IN && (
-            <Logout
-              handleSuccessfulAuth={this.handleSuccessfulAuth}
-              handleLogout={this.props.handleLogout}
-            />
+            <Logout handleLogout={this.props.handleLogout} />
           )}
         </div>
       </div>

@@ -9,6 +9,7 @@ export default class Main extends Component {
 
     this.state = {
       videos: [],
+      error: null,
     };
   }
 
@@ -16,24 +17,28 @@ export default class Main extends Component {
     this.fetchVideos();
   }
 
-  fetchVideos() {
-    axios
-      .get(`${process.env.api}/videos`, { withCredentials: true })
-      .then((response) => {
-        if (response.data && response.data.videos) {
-          this.setState({
-            videos: response.data.videos,
-          });
-        }
-      })
-      .catch((error) => {
-        console.log("fetchVideos error", error);
+  async fetchVideos() {
+    try {
+      const response = await fetch(`${process.env.api}/videos`, {
+        withCredentials: true,
       });
+      const data = await response.json();
+
+      this.setState({
+        videos: data.videos,
+      });
+    } catch (error) {
+      this.setState({
+        error: "Get list shared videos is failed.",
+      });
+    }
   }
 
   render() {
     return (
       <div className="home">
+        {this.state.error && <div>{this.state.error}</div>}
+
         {this.state.videos.map((video) => (
           <CardVideo key={video.id} video={video} />
         ))}

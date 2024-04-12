@@ -14,6 +14,7 @@ export default class Registration extends Component {
         <div className="left-box">
           <div className="video-embed">
             <div
+              role="iframe"
               dangerouslySetInnerHTML={{ __html: this.props.video.embed_code }}
             />
           </div>
